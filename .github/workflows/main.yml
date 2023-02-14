@@ -69,7 +69,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             script: |
-            sudo docker pull antonbugrov/yamdb_final:latest
+            sudo docker pull antonbugrov/api_yamdb:latest
             sudo docker-compose stop
             sudo docker-compose rm web
             touch .env
