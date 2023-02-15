@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken
+
 from api.filters import TitleFilter
 from api.mixins import MixinViewSet
 from reviews.models import Category, Genre, Review, Title
