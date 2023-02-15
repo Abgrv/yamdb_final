@@ -4,8 +4,7 @@
 [![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)](https://www.djangoproject.com)
 [![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)](https://en.wikipedia.org/wiki/HTML5)
 [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com)
-
-![example workflow](https://github.com/Abgrv/yamdb_final/actions/workflows/main.yml/badge.svg)
+![example workflow](https://github.com/Abgrv/yamdb_final/actions/workflows/yamdb_workflow.yml/badge.svg)
 
 ## Описание
 
