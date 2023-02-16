@@ -108,6 +108,44 @@
     docker-compose down -v
     ```
 
+## Шаблон наполнения env-файла
+````
+DB_ENGINE="указываем, что работаем с postgresql"
+DB_NAME="имя базы данных"
+POSTGRES_USER="логин для подключения к базе данных"
+POSTGRES_PASSWORD="пароль для подключения к БД (установите свой)"
+DB_HOST="название сервиса (контейнера)"
+DB_PORT="порт для подключения к БД"
+EMAIL_HOST_USER="Email"
+EMAIL_HOST_PASSWORD="Email Password"
+````
+
+## Описание команд для запуска приложения в контейнерах
+- Перейдите в директорию `infra/`.
+
+### Выполните команды:
+- Применить миграции.
+- Создать суперпользователя.
+- Собрать статику.
+- Запуск контейнера.
+- Для остановки контейнеров, выполните:
+
+````bash
+docker-compose up -d --build
+
+docker-compose exec web python manage.py migrate
+
+docker-compose exec web python manage.py createsuperuser
+
+docker-compose exec web python manage.py collectstatic --no-input
+
+docker-compose up
+
+docker-compose down -v
+````
+
+
+
 ## Документация API YaMDb
 
 Документация по использованию приложения доступна по эндпойнту: http://localhost/redoc/
