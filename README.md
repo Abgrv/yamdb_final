@@ -101,6 +101,8 @@ sudo docker-compose exec web python manage.py createsuperuser
 sudo docker-compose exec web python manage.py collectstatic --no-input
 ```
 
+Открываем браузер, вводим в адресную строку <ip_address_вашего_сервера>/api/v1/. Чтобы посмотреть на запущенный сервер перейдите по адресу 158.160.6.193/api/v1/
+
 ## Документация API YaMDb
 
 Документация по использованию приложения доступна по эндпойнту: http://localhost/redoc/
