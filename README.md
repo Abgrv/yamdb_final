@@ -10,141 +10,96 @@
 
 Проект **YaMDb** собирает отзывы пользователей
 
-## Установка
+# Инструкция по развёртыванию.
 
-1. Проверить наличие Docker
+## Локально:
 
-   Прежде чем приступать к работе, убедиться что Docker установлен, для этого ввести команду:
+1. Загрузите проект:
+```
+git@github.com:Abgrv/yamdb_final.git
+```
+2. Установите и активируйте виртуальное окружение:
 
-   ```bash
-   docker -v
-   ```
+```
+python -m venv venv
+source venv/Scripts/activate
+python3 -m pip install --upgrade pip
+```
+3. Установите зависимости:
+```
+pip install -r requirements.txt
+```
+4. Выполнитe миграции:
+```
+python api_yamdb/manage.py migrate 
+```
+5. В папке с файлом manage.py выполните команду запуска:
+```
+python3 manage.py runserver
+```
 
-   В случае отсутствия, скачать [Docker Desktop](https://www.docker.com/products/docker-desktop) 
-для Mac или Windows. [Docker Compose](https://docs.docker.com/compose) будет установлен 
-автоматически.
+## Настройка Workflow и состоит из четрыех шагов:
 
-   В Linux проверить, что установлена последняя версия 
-[Compose](https://docs.docker.com/compose/install/).
+- Проверка кода на соответствие PEP8
+- Сборка и публикация образа бекенда на DockerHub.
+- Автоматический деплой на удаленный сервер.
+- Отправка уведомления в телеграм-чат.
 
-   Также можно воспользоваться официальной [инструкцией](https://docs.docker.com/engine/install/).
+## Описание команд для запуска приложения в контейнерах:
 
-2. Клонировать репозиторий на локальный компьютер
+1. На Гитхабе добавьте данные в Settings - Secrets - Actions secrets:
 
-   ```bash
-   git clone https://github.com/egorcoders/infra_sp2.git
-   ```
+```
+DOCKER_USERNAME - имя пользователя в DockerHub
+DOCKER_PASSWORD - пароль пользователя в DockerHub
+HOST - ip-адрес сервера
+USER - пользователь
+SSH_KEY - приватный ssh-ключ
+PASSPHRASE - кодовая фраза для ssh-ключа
+SECRET_KEY - секретный ключ приложения django
+TELEGRAM_TO - id своего телеграм-аккаунта
+TELEGRAM_TOKEN - токен бота
+DB_NAME - postgres (по умолчанию)
+DB_ENGINE - django.db.backends.postgresql
+DB_HOST - db (по умолчанию)
+DB_PORT - 5432 (по умолчанию)
+POSTGRES_USER - postgres (по умолчанию)
+POSTGRES_PASSWORD - postgres (по умолчанию)
+```
 
-3. В корневой директории создать файл **.env**, согласно примеру:
+2. На сервере остановите службу nginx:
 
-   ```bash
-   DB_ENGINE=django.db.backends.postgresql
-   DB_NAME=postgres
-   POSTGRES_USER=postgres
-   POSTGRES_PASSWORD=postgres
-   DB_HOST=db
-   DB_PORT=5432
-   ```
+```
+sudo systemctl stop nginx 
+```
 
-4. Запустить **docker-compose**
+3. Установите docker и docker-compose:
 
-   Выполнить из корневой директории команду:
+```
+sudo apt install docker.io
+sudo apt install docker-compose -y
+```
 
-   ```bash
-   docker-compose up -d
-   ```
+Скопируйте файлы docker-compose.yaml и nginx/default.conf из вашего проекта на сервер в home/<ваш_username>/docker-compose.yaml и home/<ваш_username>/nginx/default.conf соответственно.
 
-5. Заполнить БД
+4. После успешного деплоя:
 
-   Создать и выполнить миграции:
+Для остановки контейнеров, выполните docker-compose down -v.
 
-   ```bash
-   docker-compose exec web python manage.py makemigrations --noinput
-   docker-compose exec web python manage.py migrate --noinput
-   ```
-
-6. Подгрузить статику
-
-   ```bash
-   docker-compose exec web python manage.py collectstatic --no-input
-   ```
-
-7. Заполнить БД тестовыми данными
-
-   Для заполнения базы использовать файл **fixtures.json**, в директории **infra_sp2**. Выполните 
-команду:
-
-   ```bash
-   docker-compose exec web python manage.py dumpdata > fixtures.json
-   ```
-
-8. Создать суперпользователя
-
-   ```bash
-   docker-compose exec web python manage.py createsuperuser
-   ```
-
-9. Остановить работу всех контейнеров
-
-   ```bash
-   docker-compose down
-   ```
-
-10. Пересобрать и запустить контейнеры
-
-    ```bash
-    docker-compose up -d --build
-    ```
-
-11. Мониторинг запущенных контейнеров
-
-    ```bash
-    docker stats
-    ```
-
-12. Остановить и удалить контейнеры, тома и образы
-
-    ```bash
-    docker-compose down -v
-    ```
-
-## Шаблон наполнения env-файла
-````
-DB_ENGINE="указываем, что работаем с postgresql"
-DB_NAME="имя базы данных"
-POSTGRES_USER="логин для подключения к базе данных"
-POSTGRES_PASSWORD="пароль для подключения к БД (установите свой)"
-DB_HOST="название сервиса (контейнера)"
-DB_PORT="порт для подключения к БД"
-EMAIL_HOST_USER="Email"
-EMAIL_HOST_PASSWORD="Email Password"
-````
-
-## Описание команд для запуска приложения в контейнерах
-- Перейдите в директорию `infra/`.
-
-### Выполните команды:
-- Применить миграции.
-- Создать суперпользователя.
-- Собрать статику.
 - Запуск контейнера.
-- Для остановки контейнеров, выполните:
 
-````bash
-docker-compose up -d --build
+- Применить миграции.
 
-docker-compose exec web python manage.py migrate
+- Создать суперпользователя.
 
-docker-compose exec web python manage.py createsuperuser
+- Собрать статику.
 
-docker-compose exec web python manage.py collectstatic --no-input
-
-docker-compose up
-
-docker-compose down -v
-````
-
-
+```
+sudo docker-compose up -d --build
+sudo docker-compose exec web python manage.py migrate
+sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec web python manage.py collectstatic --no-input
+```
 
 ## Документация API YaMDb
 
