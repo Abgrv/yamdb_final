@@ -6,5 +6,6 @@ COPY  /api_yamdb .
 
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt --no-cache-dir
+RUN python manage.py collectstatic
 
 CMD ["gunicorn", "api_yamdb.wsgi:application", "--bind", "0:8000" ]
